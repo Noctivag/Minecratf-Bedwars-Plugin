@@ -4,8 +4,10 @@ import com.bedwars.commands.BedwarsCommand;
 import com.bedwars.commands.BedwarsAdminCommand;
 import com.bedwars.listeners.GameListener;
 import com.bedwars.listeners.PlayerListener;
+import com.bedwars.listeners.GUIListener;
 import com.bedwars.managers.ArenaManager;
 import com.bedwars.managers.GameManager;
+import com.bedwars.managers.ScoreboardManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BedwarsPlugin extends JavaPlugin {
@@ -14,6 +16,7 @@ public class BedwarsPlugin extends JavaPlugin {
     private ArenaManager arenaManager;
     private GameManager gameManager;
     private ScoreboardManager scoreboardManager;
+    private GUIListener guiListener;
     
     @Override
     public void onEnable() {
@@ -36,7 +39,12 @@ public class BedwarsPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new com.bedwars.listeners.ShopListener(this), this);
         
+        // Register GUI listener
+        guiListener = new GUIListener(this);
+        getServer().getPluginManager().registerEvents(guiListener, this);
+        
         getLogger().info("Bedwars Plugin has been enabled!");
+        getLogger().info("Game modes available: SOLO, DOUBLES, THREES, FOURS, MEGA_DOUBLES, MEGA_FOURS");
     }
     
     @Override
@@ -63,5 +71,9 @@ public class BedwarsPlugin extends JavaPlugin {
     
     public ScoreboardManager getScoreboardManager() {
         return scoreboardManager;
+    }
+    
+    public GUIListener getGUIListener() {
+        return guiListener;
     }
 }

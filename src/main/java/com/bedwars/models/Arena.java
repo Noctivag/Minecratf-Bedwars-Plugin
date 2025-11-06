@@ -9,7 +9,9 @@ public class Arena implements ConfigurationSerializable {
     
     private String name;
     private String displayName;
+    private GameMode gameMode;
     private Location lobbySpawn;
+    private Location spectatorSpawn;
     private Map<TeamColor, TeamData> teams;
     private List<ResourceSpawner> resourceSpawners;
     private int minPlayers;
@@ -19,10 +21,22 @@ public class Arena implements ConfigurationSerializable {
     public Arena(String name) {
         this.name = name;
         this.displayName = name;
+        this.gameMode = GameMode.FOURS; // Default mode
         this.teams = new HashMap<>();
         this.resourceSpawners = new ArrayList<>();
         this.minPlayers = 2;
         this.maxPlayers = 16;
+        this.enabled = false;
+    }
+    
+    public Arena(String name, GameMode gameMode) {
+        this.name = name;
+        this.displayName = name;
+        this.gameMode = gameMode;
+        this.teams = new HashMap<>();
+        this.resourceSpawners = new ArrayList<>();
+        this.minPlayers = gameMode.getMinPlayers();
+        this.maxPlayers = gameMode.getMaxPlayers();
         this.enabled = false;
     }
     
@@ -31,7 +45,13 @@ public class Arena implements ConfigurationSerializable {
     public Arena(Map<String, Object> map) {
         this.name = (String) map.get("name");
         this.displayName = (String) map.get("displayName");
+        
+        // Load game mode
+        String modeStr = (String) map.get("gameMode");
+        this.gameMode = modeStr != null ? GameMode.valueOf(modeStr) : GameMode.FOURS;
+        
         this.lobbySpawn = (Location) map.get("lobbySpawn");
+        this.spectatorSpawn = (Location) map.get("spectatorSpawn");
         this.minPlayers = (int) map.get("minPlayers");
         this.maxPlayers = (int) map.get("maxPlayers");
         this.enabled = (boolean) map.get("enabled");
@@ -60,7 +80,9 @@ public class Arena implements ConfigurationSerializable {
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("displayName", displayName);
+        map.put("gameMode", gameMode.name());
         map.put("lobbySpawn", lobbySpawn);
+        map.put("spectatorSpawn", spectatorSpawn);
         map.put("minPlayers", minPlayers);
         map.put("maxPlayers", maxPlayers);
         map.put("enabled", enabled);
@@ -87,8 +109,18 @@ public class Arena implements ConfigurationSerializable {
     public String getDisplayName() { return displayName; }
     public void setDisplayName(String displayName) { this.displayName = displayName; }
     
+    public GameMode getGameMode() { return gameMode; }
+    public void setGameMode(GameMode gameMode) { 
+        this.gameMode = gameMode;
+        this.minPlayers = gameMode.getMinPlayers();
+        this.maxPlayers = gameMode.getMaxPlayers();
+    }
+    
     public Location getLobbySpawn() { return lobbySpawn; }
     public void setLobbySpawn(Location lobbySpawn) { this.lobbySpawn = lobbySpawn; }
+    
+    public Location getSpectatorSpawn() { return spectatorSpawn; }
+    public void setSpectatorSpawn(Location spectatorSpawn) { this.spectatorSpawn = spectatorSpawn; }
     
     public Map<TeamColor, TeamData> getTeams() { return teams; }
     public void setTeams(Map<TeamColor, TeamData> teams) { this.teams = teams; }

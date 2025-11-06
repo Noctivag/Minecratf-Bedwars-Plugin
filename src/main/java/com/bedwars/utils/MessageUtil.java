@@ -11,6 +11,10 @@ public class MessageUtil {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
     
+    public static String stripColor(String message) {
+        return ChatColor.stripColor(message);
+    }
+    
     public static String getMessage(String key, Map<String, String> placeholders) {
         BedwarsPlugin plugin = BedwarsPlugin.getInstance();
         String prefix = plugin.getConfig().getString("messages.prefix", "&7[&cBedwars&7] ");

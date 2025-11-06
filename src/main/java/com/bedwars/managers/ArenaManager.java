@@ -90,6 +90,10 @@ public class ArenaManager {
         return setupArenas.computeIfAbsent(name, Arena::new);
     }
     
+    public void addArena(Arena arena) {
+        setupArenas.put(arena.getName(), arena);
+    }
+    
     public void finishSetup(String name) {
         Arena arena = setupArenas.remove(name);
         if (arena != null && arena.isComplete()) {

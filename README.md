@@ -1,39 +1,55 @@
 # Minecraft Bedwars Plugin
 
-A fully-featured Hypixel-style Bedwars plugin for Minecraft 1.21 (Spigot/Paper).
+Ein vollständig ausgestattetes Hypixel-Stil Bedwars Plugin für Minecraft 1.21 (Spigot/Paper) mit Multi-Modus Support!
 
-## Features
+## 🎮 Features
+
+### Spielmodi (wie Hypixel!)
+- **Solo (1v1v1v1v1v1v1v1)**: 8 Teams mit je 1 Spieler (max. 8 Spieler)
+- **Doubles (2v2v2v2v2v2v2v2)**: 8 Teams mit je 2 Spielern (max. 16 Spieler)  
+- **3v3v3v3**: 4 Teams mit je 3 Spielern (max. 12 Spieler)
+- **4v4v4v4**: 4 Teams mit je 4 Spielern (max. 16 Spieler)
+- **Mega Doubles**: 16 Teams mit je 2 Spielern (max. 32 Spieler)
+- **Mega 4v4**: 8 Teams mit je 4 Spielern (max. 32 Spieler)
 
 ### Core Gameplay
-- **Team-based PvP**: Up to 8 teams (Red, Blue, Green, Yellow, Aqua, White, Pink, Gray)
-- **Bed Mechanics**: Protect your bed to respawn; destroy enemy beds for final kills
-- **Resource Spawners**: Iron, Gold, Diamond, and Emerald generators with customizable spawn rates
-- **Shop System**: Complete shop with 40+ items across 7 categories (Blocks, Weapons, Armor, Tools, Food, Potions, Utility)
-- **Team Upgrades**: Sharpness, Protection, Haste, and more
-- **Player Statistics**: Track kills, deaths, wins, beds destroyed, and more
-- **Live Scoreboard**: Real-time game information and team status
+- **Team-basiertes PvP**: Bis zu 8 Teams (Rot, Blau, Grün, Gelb, Aqua, Weiß, Pink, Grau)
+- **Bett-Mechanik**: Beschütze dein Bett zum Respawnen; zerstöre gegnerische Betten für finale Kills
+- **Ressourcen-Spawner**: Eisen, Gold, Diamant und Smaragd-Generatoren mit anpassbaren Spawn-Raten
+- **Shop-System**: Kompletter Shop mit 40+ Items in 7 Kategorien (Blöcke, Waffen, Rüstung, Tools, Essen, Tränke, Utility)
+- **Team-Upgrades**: Sharpness, Protection, Haste und mehr
+- **Spieler-Statistiken**: Verfolge Kills, Deaths, Wins, zerstörte Betten und mehr
+- **Live-Scoreboard**: Echtzeit-Spielinformationen und Team-Status
 
-### Map Management
-- **Easy Map Import**: Simple commands to set up new arenas
-- **Admin Tools**: Configure spawn points, bed locations, and resource spawners
-- **Multi-Arena Support**: Run multiple games simultaneously
+### Intuitive GUI
+- **Spielmodus-Selektor**: Wähle deinen bevorzugten Spielmodus
+- **Arena-Browser**: Sieh alle verfügbaren Arenas und deren Status
+- **Einfacher Beitritt**: Ein Klick zum Joinen!
+
+### Map-Verwaltung
+- **Einfacher Map-Import**: Simple Commands zum Einrichten neuer Arenas
+- **Admin-Tools**: Konfiguriere Spawn-Punkte, Bett-Positionen und Ressourcen-Spawner
+- **Multi-Arena-Support**: Führe mehrere Spiele gleichzeitig aus
+- **Modus-spezifische Arenas**: Erstelle dedizierte Arenas für jeden Spielmodus
 
 ### Admin Features
-Complete setup system with the following configurable elements:
-- Lobby spawn point
-- Team bed locations
-- Team spawn points
-- Resource spawner locations (team-specific or shared)
-- Arena enable/disable functionality
+Komplettes Setup-System mit folgenden konfigurierbaren Elementen:
+- Spielmodus-Auswahl pro Arena
+- Lobby-Spawn-Punkt
+- Spectator-Spawn-Punkt
+- Team-Bett-Positionen
+- Team-Spawn-Punkte
+- Ressourcen-Spawner-Positionen (teamspezifisch oder geteilt)
+- Arena Enable/Disable-Funktionalität
 
-## Installation
+## 📦 Installation
 
-1. Download the plugin JAR file from releases
-2. Place it in your server's `plugins` folder
-3. Restart your server
-4. Configure the plugin using the commands below
+1. Lade die Plugin-JAR-Datei von den Releases herunter
+2. Platziere sie im `plugins`-Ordner deines Servers
+3. Starte deinen Server neu
+4. Konfiguriere das Plugin mit den unten aufgeführten Commands
 
-## Building from Source
+## 🔨 Building from Source
 
 ```bash
 git clone https://github.com/Noctivag/Minecratf-Bedwars-Plugin.git
@@ -41,25 +57,29 @@ cd Minecratf-Bedwars-Plugin
 mvn clean package
 ```
 
-The compiled JAR will be in the `target` folder.
+Die kompilierte JAR-Datei befindet sich im `target`-Ordner.
 
-## Commands
+## 📝 Commands
 
-### Player Commands
-- `/bw join <arena>` - Join a Bedwars game
-- `/bw leave` - Leave your current game
-- `/bw stats` - View your statistics
-- `/bw list` - List available arenas
+### Spieler-Commands
+- `/bw play` - Öffne den Spielmodus-Selektor (GUI)
+- `/bw join <arena>` - Trete einer bestimmten Bedwars-Arena bei
+- `/bw leave` - Verlasse dein aktuelles Spiel
+- `/bw stats` - Zeige deine Statistiken an
+- `/bw list` - Liste alle verfügbaren Arenas auf
 
-### Admin Commands
-- `/bwa setup <arena>` - Start setting up a new arena
-- `/bwa setlobby` - Set the lobby spawn point for the current arena
-- `/bwa setbed <team>` - Set a team's bed location
-- `/bwa setspawn <team>` - Set a team's spawn point
-- `/bwa setresource <type> [team]` - Add a resource spawner
-  - Types: `IRON`, `GOLD`, `DIAMOND`, `EMERALD`
-  - Optional team parameter for team-specific spawners
-- `/bwa savearena` - Save and enable the current arena
+### Admin-Commands
+- `/bwa setup <arena> [modus]` - Beginne mit dem Setup einer neuen Arena (optional mit Spielmodus)
+  - Modi: `SOLO`, `DOUBLES`, `THREES`, `FOURS`, `MEGA_DOUBLES`, `MEGA_FOURS`
+- `/bwa setmode <modus>` - Setze den Spielmodus für die aktuelle Arena
+- `/bwa setlobby` - Setze den Lobby-Spawn-Punkt für die aktuelle Arena
+- `/bwa setspectator` - Setze den Spectator-Spawn-Punkt
+- `/bwa setbed <team>` - Setze die Bett-Position eines Teams
+- `/bwa setspawn <team>` - Setze den Spawn-Punkt eines Teams
+- `/bwa setresource <typ> [team]` - Füge einen Ressourcen-Spawner hinzu
+  - Typen: `IRON`, `GOLD`, `DIAMOND`, `EMERALD`
+  - Optionaler Team-Parameter für teamspezifische Spawner
+- `/bwa savearena` - Speichere und aktiviere die aktuelle Arena
 - `/bwa deletearena <arena>` - Delete an arena
 - `/bwa list` - List all arenas
 - `/bwa enable <arena>` - Enable an arena

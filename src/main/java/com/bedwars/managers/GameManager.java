@@ -74,6 +74,14 @@ public class GameManager {
         return playerGames.containsKey(player.getUniqueId());
     }
     
+    public boolean hasGame(String arenaName) {
+        return games.containsKey(arenaName);
+    }
+    
+    public BedwarsGame getGame(String arenaName) {
+        return games.get(arenaName);
+    }
+    
     public void endGame(BedwarsGame game) {
         // Remove all players from tracking
         for (Player player : game.getAllPlayers()) {

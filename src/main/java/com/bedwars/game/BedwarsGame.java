@@ -53,20 +53,29 @@ public class BedwarsGame {
             return false;
         }
         
+        // Check if game is full
+        if (getTotalPlayers() >= arena.getMaxPlayers()) {
+            return false;
+        }
+        
         // Find team with least players
         TeamColor assignedTeam = null;
         int minSize = Integer.MAX_VALUE;
         
         for (Map.Entry<TeamColor, List<Player>> entry : teams.entrySet()) {
             TeamData teamData = arena.getTeam(entry.getKey());
-            if (entry.getValue().size() < teamData.getMaxSize() && entry.getValue().size() < minSize) {
-                minSize = entry.getValue().size();
+            int teamSize = entry.getValue().size();
+            int maxTeamSize = arena.getGameMode().getTeamSize();
+            
+            // Only assign to teams that haven't reached max size
+            if (teamSize < maxTeamSize && teamSize < minSize) {
+                minSize = teamSize;
                 assignedTeam = entry.getKey();
             }
         }
         
         if (assignedTeam == null) {
-            return false; // Game is full
+            return false; // All teams are full
         }
         
         // Add player to team
@@ -75,11 +84,14 @@ public class BedwarsGame {
         
         // Teleport to lobby
         player.teleport(arena.getLobbySpawn());
-        player.setGameMode(GameMode.ADVENTURE);
+        player.setGameMode(org.bukkit.GameMode.ADVENTURE);
         player.getInventory().clear();
         
-        // Send join message
-        broadcastMessage(MessageUtil.color("&e" + player.getName() + " joined the game! &7(" + 
+        TeamData teamData = arena.getTeam(assignedTeam);
+        
+        // Send join message with team info
+        broadcastMessage(MessageUtil.color("&e" + player.getName() + " &7joined &" + 
+            assignedTeam.getChatColor() + assignedTeam.getDisplayName() + " Team &7(" + 
             getTotalPlayers() + "/" + arena.getMaxPlayers() + ")"));
         
         // Check if game should start
@@ -97,7 +109,7 @@ public class BedwarsGame {
         }
         
         // Reset player
-        player.setGameMode(GameMode.SURVIVAL);
+        player.setGameMode(org.bukkit.GameMode.SURVIVAL);
         player.getInventory().clear();
         player.setHealth(20.0);
         player.setFoodLevel(20);
@@ -162,7 +174,7 @@ public class BedwarsGame {
             TeamData teamData = arena.getTeam(entry.getKey());
             for (Player player : entry.getValue()) {
                 player.teleport(teamData.getSpawnLocation());
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(org.bukkit.GameMode.SURVIVAL);
                 giveStartingItems(player, entry.getKey());
             }
         }
@@ -293,7 +305,7 @@ public class BedwarsGame {
         if (isFinalKill) {
             // Remove from game
             teams.get(victimTeam).remove(victim);
-            victim.setGameMode(GameMode.SPECTATOR);
+            victim.setGameMode(org.bukkit.GameMode.SPECTATOR);
             
             // Check if team is eliminated
             if (teams.get(victimTeam).isEmpty()) {
@@ -318,7 +330,7 @@ public class BedwarsGame {
                 if (seconds <= 0) {
                     TeamData teamData = arena.getTeam(team);
                     player.teleport(teamData.getSpawnLocation());
-                    player.setGameMode(GameMode.SURVIVAL);
+                    player.setGameMode(org.bukkit.GameMode.SURVIVAL);
                     giveStartingItems(player, team);
                     cancel();
                     return;
@@ -389,7 +401,7 @@ public class BedwarsGame {
         // Teleport players back
         for (Player player : getAllPlayers()) {
             player.teleport(plugin.getConfig().getLocation("lobby"));
-            player.setGameMode(GameMode.SURVIVAL);
+            player.setGameMode(org.bukkit.GameMode.SURVIVAL);
             player.getInventory().clear();
             player.setHealth(20.0);
             player.setFoodLevel(20);

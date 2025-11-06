@@ -44,14 +44,28 @@ public class BedwarsAdminCommand implements CommandExecutor {
         switch (args[0].toLowerCase()) {
             case "setup":
                 if (args.length < 2) {
-                    player.sendMessage(MessageUtil.color("&cUsage: /bwadmin setup <arena>"));
+                    player.sendMessage(MessageUtil.color("&cUsage: /bwadmin setup <arena> [gamemode]"));
+                    player.sendMessage(MessageUtil.color("&cModes: SOLO, DOUBLES, THREES, FOURS, MEGA_DOUBLES, MEGA_FOURS"));
                     return true;
                 }
-                handleSetup(player, args[1]);
+                handleSetup(player, args);
+                break;
+                
+            case "setmode":
+                if (args.length < 2) {
+                    player.sendMessage(MessageUtil.color("&cUsage: /bwadmin setmode <mode>"));
+                    player.sendMessage(MessageUtil.color("&cModes: SOLO, DOUBLES, THREES, FOURS, MEGA_DOUBLES, MEGA_FOURS"));
+                    return true;
+                }
+                handleSetMode(player, args[1]);
                 break;
                 
             case "setlobby":
                 handleSetLobby(player);
+                break;
+                
+            case "setspectator":
+                handleSetSpectator(player);
                 break;
                 
             case "setbed":
@@ -122,8 +136,10 @@ public class BedwarsAdminCommand implements CommandExecutor {
     private void sendHelp(Player player) {
         player.sendMessage(MessageUtil.color("&7&m                                    "));
         player.sendMessage(MessageUtil.color("&c&lBedwars Admin Commands"));
-        player.sendMessage(MessageUtil.color("&e/bwa setup <arena> &7- Start arena setup"));
+        player.sendMessage(MessageUtil.color("&e/bwa setup <arena> [mode] &7- Start arena setup"));
+        player.sendMessage(MessageUtil.color("&e/bwa setmode <mode> &7- Set game mode (SOLO/DOUBLES/THREES/FOURS)"));
         player.sendMessage(MessageUtil.color("&e/bwa setlobby &7- Set lobby spawn point"));
+        player.sendMessage(MessageUtil.color("&e/bwa setspectator &7- Set spectator spawn point"));
         player.sendMessage(MessageUtil.color("&e/bwa setbed <team> &7- Set team bed location"));
         player.sendMessage(MessageUtil.color("&e/bwa setspawn <team> &7- Set team spawn point"));
         player.sendMessage(MessageUtil.color("&e/bwa setresource <type> [team] &7- Set resource spawner"));
@@ -132,15 +148,72 @@ public class BedwarsAdminCommand implements CommandExecutor {
         player.sendMessage(MessageUtil.color("&e/bwa list &7- List all arenas"));
         player.sendMessage(MessageUtil.color("&e/bwa enable <arena> &7- Enable an arena"));
         player.sendMessage(MessageUtil.color("&e/bwa disable <arena> &7- Disable an arena"));
-        player.sendMessage(MessageUtil.color("&7Teams: RED, BLUE, GREEN, YELLOW"));
+        player.sendMessage(MessageUtil.color("&7Teams: RED, BLUE, GREEN, YELLOW, AQUA, WHITE, PINK, GRAY"));
         player.sendMessage(MessageUtil.color("&7&m                                    "));
     }
     
-    private void handleSetup(Player player, String arenaName) {
+    private void handleSetup(Player player, String[] args) {
+        String arenaName = args[1];
+        GameMode gameMode = GameMode.FOURS; // Default
+        
+        // Parse game mode if provided
+        if (args.length >= 3) {
+            GameMode mode = GameMode.fromString(args[2]);
+            if (mode != null) {
+                gameMode = mode;
+            } else {
+                player.sendMessage(MessageUtil.color("&cInvalid game mode! Using default: FOURS"));
+            }
+        }
+        
         setupMode.put(player.getName(), arenaName);
         player.sendMessage(MessageUtil.color("&aStarted setup for arena: &e" + arenaName));
+        player.sendMessage(MessageUtil.color("&aGame Mode: &e" + gameMode.getDisplayName()));
+        player.sendMessage(MessageUtil.color("&7" + gameMode.getDescription()));
         player.sendMessage(MessageUtil.color("&7Now you can configure the arena using other commands."));
         player.sendMessage(MessageUtil.color("&7Use /bwa savearena when done to save the configuration."));
+    }
+    
+    private void handleSetMode(Player player, String modeStr) {
+        String arenaName = setupMode.get(player.getName());
+        if (arenaName == null) {
+            player.sendMessage(MessageUtil.color("&cYou must start setup first! Use /bwa setup <arena>"));
+            return;
+        }
+        
+        GameMode mode = GameMode.fromString(modeStr);
+        if (mode == null) {
+            player.sendMessage(MessageUtil.color("&cInvalid game mode!"));
+            player.sendMessage(MessageUtil.color("&cAvailable modes:"));
+            for (GameMode gm : GameMode.values()) {
+                player.sendMessage(MessageUtil.color("&e- " + gm.name() + " &7(" + gm.getDescription() + ")"));
+            }
+            return;
+        }
+        
+        Arena arena = plugin.getArenaManager().getArena(arenaName);
+        if (arena == null) {
+            arena = new Arena(arenaName, mode);
+            plugin.getArenaManager().addArena(arena);
+        } else {
+            arena.setGameMode(mode);
+        }
+        
+        player.sendMessage(MessageUtil.color("&aGame mode set to: &e" + mode.getDisplayName()));
+        player.sendMessage(MessageUtil.color("&7" + mode.getDescription()));
+    }
+    
+    private void handleSetSpectator(Player player) {
+        String arenaName = setupMode.get(player.getName());
+        if (arenaName == null) {
+            player.sendMessage(MessageUtil.color("&cYou must start setup first! Use /bwa setup <arena>"));
+            return;
+        }
+        
+        Arena arena = plugin.getArenaManager().getSetupArena(arenaName);
+        arena.setSpectatorSpawn(player.getLocation());
+        
+        player.sendMessage(MessageUtil.color("&aSpectator spawn point set for arena &e" + arenaName));
     }
     
     private void handleSetLobby(Player player) {
@@ -300,9 +373,11 @@ public class BedwarsAdminCommand implements CommandExecutor {
             for (Arena arena : plugin.getArenaManager().getArenas()) {
                 String status = arena.isEnabled() ? "&aEnabled" : "&cDisabled";
                 String complete = arena.isComplete() ? "&aComplete" : "&eIncomplete";
+                String mode = arena.getGameMode().getDisplayName();
                 
                 player.sendMessage(MessageUtil.color("&e" + arena.getName() + " &7- " + 
-                    status + " &7- " + complete));
+                    status + " &7- " + complete + " &7- &6" + mode));
+                player.sendMessage(MessageUtil.color("  &7Mode: &f" + arena.getGameMode().getDescription()));
             }
         }
         

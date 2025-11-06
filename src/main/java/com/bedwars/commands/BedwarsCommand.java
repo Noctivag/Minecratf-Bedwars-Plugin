@@ -35,12 +35,15 @@ public class BedwarsCommand implements CommandExecutor {
         }
         
         switch (args[0].toLowerCase()) {
+            case "play":
             case "join":
-                if (args.length < 2) {
-                    player.sendMessage(MessageUtil.color("&cUsage: /bw join <arena>"));
-                    return true;
+                if (args.length == 1) {
+                    // Open game mode selector GUI
+                    handlePlayGUI(player);
+                } else {
+                    // Direct join to arena
+                    handleJoin(player, args[1]);
                 }
-                handleJoin(player, args[1]);
                 break;
                 
             case "leave":
@@ -70,11 +73,22 @@ public class BedwarsCommand implements CommandExecutor {
     private void sendHelp(Player player) {
         player.sendMessage(MessageUtil.color("&7&m                                    "));
         player.sendMessage(MessageUtil.color("&c&lBedwars Commands"));
-        player.sendMessage(MessageUtil.color("&e/bw join <arena> &7- Join a game"));
+        player.sendMessage(MessageUtil.color("&e/bw play &7- Open game mode selector"));
+        player.sendMessage(MessageUtil.color("&e/bw join <arena> &7- Join a specific arena"));
         player.sendMessage(MessageUtil.color("&e/bw leave &7- Leave current game"));
         player.sendMessage(MessageUtil.color("&e/bw stats &7- View your statistics"));
         player.sendMessage(MessageUtil.color("&e/bw list &7- List available arenas"));
         player.sendMessage(MessageUtil.color("&7&m                                    "));
+    }
+    
+    private void handlePlayGUI(Player player) {
+        if (plugin.getGameManager().isInGame(player)) {
+            player.sendMessage(MessageUtil.color("&cYou are already in a game!"));
+            return;
+        }
+        
+        // Open the game mode selector GUI
+        plugin.getGUIListener().getSelectorGUI().openGameModeSelector(player);
     }
     
     private void handleJoin(Player player, String arenaName) {
@@ -170,7 +184,8 @@ public class BedwarsCommand implements CommandExecutor {
                     }
                 }
                 
-                player.sendMessage(MessageUtil.color("&e" + arena.getDisplayName() + " &7- " + 
+                player.sendMessage(MessageUtil.color("&e" + arena.getDisplayName() + " &7- &6" + 
+                    arena.getGameMode().getDisplayName() + " &7- " + 
                     status + " &7(" + players + "/" + arena.getMaxPlayers() + ")"));
             }
         }
