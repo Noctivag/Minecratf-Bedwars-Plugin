@@ -1,0 +1,25 @@
+name: BedwarsPlugin
+version: '${project.version}'
+main: com.bedwars.BedwarsPlugin
+api-version: '1.21'
+author: Noctivag
+description: A Hypixel-style Bedwars plugin
+
+commands:
+  bedwars:
+    description: Main bedwars command
+    usage: /bedwars <help|join|leave|stats>
+    aliases: [bw]
+  bwadmin:
+    description: Admin commands for bedwars
+    usage: /bwadmin <help|setup|setbed|setspawn|setresource|savearena|deletearena|list>
+    permission: bedwars.admin
+    aliases: [bwa]
+
+permissions:
+  bedwars.admin:
+    description: Access to admin commands
+    default: op
+  bedwars.play:
+    description: Allows players to join games
+    default: true

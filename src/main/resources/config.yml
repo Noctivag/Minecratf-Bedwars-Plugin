@@ -1,0 +1,71 @@
+# Bedwars Plugin Configuration
+
+# Game Settings
+game:
+  min-players: 2
+  max-players: 16
+  countdown-seconds: 10
+  
+  # Resource spawner timings (in seconds)
+  spawners:
+    iron-spawn-rate: 1
+    gold-spawn-rate: 8
+    diamond-spawn-rate: 30
+    emerald-spawn-rate: 60
+    
+  # Team upgrade costs
+  upgrades:
+    sharpness:
+      tier1: 4
+      tier2: 8
+      tier3: 12
+      tier4: 16
+    protection:
+      tier1: 2
+      tier2: 4
+      tier3: 8
+      tier4: 16
+    haste:
+      tier1: 2
+      tier2: 4
+    
+# Teams Configuration
+teams:
+  red:
+    name: "Red Team"
+    color: "RED"
+    max-size: 4
+  blue:
+    name: "Blue Team"
+    color: "BLUE"
+    max-size: 4
+  green:
+    name: "Green Team"
+    color: "GREEN"
+    max-size: 4
+  yellow:
+    name: "Yellow Team"
+    color: "YELLOW"
+    max-size: 4
+
+# Messages
+messages:
+  prefix: "&7[&cBedwars&7] "
+  game-starting: "&aGame starting in {seconds} seconds!"
+  game-started: "&aThe game has begun!"
+  bed-destroyed: "&c{team}'s bed has been destroyed by {player}!"
+  player-killed: "&e{killer} killed {victim}!"
+  final-kill: "&c{victim} was FINAL KILLED by {killer}!"
+  team-eliminated: "&c{team} has been eliminated!"
+  game-ended: "&e{team} has won the game!"
+  respawn-in: "&cYou will respawn in {seconds} seconds..."
+  no-bed: "&cYour bed was destroyed! You will not respawn!"
+  
+# Lobby location (set with /bwadmin setlobby)
+lobby:
+  world: world
+  x: 0
+  y: 100
+  z: 0
+  yaw: 0
+  pitch: 0
