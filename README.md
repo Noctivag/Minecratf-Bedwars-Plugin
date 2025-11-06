@@ -8,8 +8,10 @@ A fully-featured Hypixel-style Bedwars plugin for Minecraft 1.21 (Spigot/Paper).
 - **Team-based PvP**: Up to 8 teams (Red, Blue, Green, Yellow, Aqua, White, Pink, Gray)
 - **Bed Mechanics**: Protect your bed to respawn; destroy enemy beds for final kills
 - **Resource Spawners**: Iron, Gold, Diamond, and Emerald generators with customizable spawn rates
+- **Shop System**: Complete shop with 40+ items across 7 categories (Blocks, Weapons, Armor, Tools, Food, Potions, Utility)
 - **Team Upgrades**: Sharpness, Protection, Haste, and more
 - **Player Statistics**: Track kills, deaths, wins, beds destroyed, and more
+- **Live Scoreboard**: Real-time game information and team status
 
 ### Map Management
 - **Easy Map Import**: Simple commands to set up new arenas
@@ -152,7 +154,10 @@ game:
 1. **Join a Game**: `/bw join <arena>`
 2. **Objective**: Destroy all enemy beds and eliminate all players
 3. **Resources**: Collect iron, gold, diamonds, and emeralds from spawners
-4. **Shop**: Use resources to buy items and upgrades (coming soon)
+4. **Shop**: Right-click villagers at your base to open the shop
+   - Buy blocks, weapons, armor, tools, food, potions, and utility items
+   - Items are organized into 7 easy-to-navigate categories
+   - Permanent armor upgrades available
 5. **Win**: Be the last team standing!
 
 ## Game Mechanics

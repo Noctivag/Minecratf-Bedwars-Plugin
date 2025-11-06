@@ -219,6 +219,11 @@ public class BedwarsGame {
     }
     
     private void gameTick() {
+        // Update scoreboards
+        for (Player player : getAllPlayers()) {
+            plugin.getScoreboardManager().updateScoreboard(player, this);
+        }
+        
         // Apply team upgrades
         for (Map.Entry<TeamColor, List<Player>> entry : teams.entrySet()) {
             TeamUpgrades upgrades = teamUpgrades.get(entry.getKey());
@@ -375,6 +380,11 @@ public class BedwarsGame {
             task.cancel();
         }
         spawnerTasks.clear();
+        
+        // Remove scoreboards
+        for (Player player : getAllPlayers()) {
+            plugin.getScoreboardManager().removeScoreboard(player);
+        }
         
         // Teleport players back
         for (Player player : getAllPlayers()) {

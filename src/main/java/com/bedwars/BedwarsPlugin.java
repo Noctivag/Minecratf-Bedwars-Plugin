@@ -13,6 +13,7 @@ public class BedwarsPlugin extends JavaPlugin {
     private static BedwarsPlugin instance;
     private ArenaManager arenaManager;
     private GameManager gameManager;
+    private ScoreboardManager scoreboardManager;
     
     @Override
     public void onEnable() {
@@ -24,6 +25,7 @@ public class BedwarsPlugin extends JavaPlugin {
         // Initialize managers
         arenaManager = new ArenaManager(this);
         gameManager = new GameManager(this);
+        scoreboardManager = new ScoreboardManager(this);
         
         // Register commands
         getCommand("bedwars").setExecutor(new BedwarsCommand(this));
@@ -32,6 +34,7 @@ public class BedwarsPlugin extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new com.bedwars.listeners.ShopListener(this), this);
         
         getLogger().info("Bedwars Plugin has been enabled!");
     }
@@ -56,5 +59,9 @@ public class BedwarsPlugin extends JavaPlugin {
     
     public GameManager getGameManager() {
         return gameManager;
+    }
+    
+    public ScoreboardManager getScoreboardManager() {
+        return scoreboardManager;
     }
 }
