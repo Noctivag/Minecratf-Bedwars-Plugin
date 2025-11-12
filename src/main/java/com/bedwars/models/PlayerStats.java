@@ -44,10 +44,20 @@ public class PlayerStats {
     public int getWins() { return wins; }
     public int getLosses() { return losses; }
     public int getGamesPlayed() { return gamesPlayed; }
-    
+
     public int getGameKills() { return gameKills; }
     public int getGameFinalKills() { return gameFinalKills; }
     public int getGameBedsDestroyed() { return gameBedsDestroyed; }
+
+    // Setters (for database loading)
+    public void setKills(int kills) { this.kills = kills; }
+    public void setDeaths(int deaths) { this.deaths = deaths; }
+    public void setFinalKills(int finalKills) { this.finalKills = finalKills; }
+    public void setFinalDeaths(int finalDeaths) { this.finalDeaths = finalDeaths; }
+    public void setBedsDestroyed(int bedsDestroyed) { this.bedsDestroyed = bedsDestroyed; }
+    public void setWins(int wins) { this.wins = wins; }
+    public void setLosses(int losses) { this.losses = losses; }
+    public void setGamesPlayed(int gamesPlayed) { this.gamesPlayed = gamesPlayed; }
     
     public double getKDRatio() {
         return deaths == 0 ? kills : (double) kills / deaths;

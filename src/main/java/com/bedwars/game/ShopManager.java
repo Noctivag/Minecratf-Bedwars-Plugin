@@ -153,6 +153,11 @@ public class ShopManager {
         addItem(ShopItem.ShopCategory.UTILITY, new ShopItem("Fireball", Material.FIRE_CHARGE, 1,
             ShopItem.CurrencyType.IRON, 40, ShopItem.ShopCategory.UTILITY)
             .addLore("§7Launch a fireball!"));
+
+        addItem(ShopItem.ShopCategory.UTILITY, new ShopItem("Tracker", Material.COMPASS, 1,
+            ShopItem.CurrencyType.EMERALD, 2, ShopItem.ShopCategory.UTILITY)
+            .addLore("§7Track nearest enemy or bed")
+            .addLore("§7Right-click to switch modes"));
     }
     
     private static void addItem(ShopItem.ShopCategory category, ShopItem item) {
