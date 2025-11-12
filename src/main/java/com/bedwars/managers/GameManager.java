@@ -9,17 +9,15 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class GameManager {
-    
+
     private final BedwarsPlugin plugin;
     private final Map<String, BedwarsGame> games; // arena name -> game
     private final Map<UUID, BedwarsGame> playerGames; // player -> game
-    private final Map<UUID, PlayerStats> playerStats; // player -> stats
-    
+
     public GameManager(BedwarsPlugin plugin) {
         this.plugin = plugin;
         this.games = new HashMap<>();
         this.playerGames = new HashMap<>();
-        this.playerStats = new HashMap<>();
     }
     
     public BedwarsGame createGame(Arena arena) {
@@ -105,6 +103,6 @@ public class GameManager {
     }
     
     public PlayerStats getPlayerStats(Player player) {
-        return playerStats.computeIfAbsent(player.getUniqueId(), k -> new PlayerStats());
+        return plugin.getStatsManager().getPlayerStats(player);
     }
 }

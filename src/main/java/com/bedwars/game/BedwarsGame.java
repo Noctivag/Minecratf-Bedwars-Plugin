@@ -158,15 +158,17 @@ public class BedwarsGame {
     
     private void startGame() {
         state = GameState.ACTIVE;
-        
+
         // Initialize alive teams
         for (TeamColor color : teams.keySet()) {
             if (!teams.get(color).isEmpty()) {
                 aliveTeams.add(color);
                 arena.getTeam(color).setBedAlive(true);
+                // Initialize generator upgrades for team
+                plugin.getGeneratorUpgradeManager().initializeTeam(color);
             }
         }
-        
+
         broadcastMessage(MessageUtil.getMessage("game-started", Map.of()));
         
         // Teleport players to spawn points
@@ -225,9 +227,12 @@ public class BedwarsGame {
     
     private void giveStartingItems(Player player, TeamColor team) {
         player.getInventory().clear();
-        
+
         // Give wooden sword
         player.getInventory().addItem(new ItemStack(Material.WOODEN_SWORD));
+
+        // Give compass tracker
+        plugin.getCompassTracker().giveCompass(player);
     }
     
     private void gameTick() {
@@ -354,24 +359,36 @@ public class BedwarsGame {
     
     private void endGame(TeamColor winner) {
         state = GameState.ENDING;
-        
-        broadcastMessage(MessageUtil.getMessage("game-ended", 
+
+        broadcastMessage(MessageUtil.getMessage("game-ended",
             Map.of("team", winner.getColoredName())));
-        
+
+        // Update stats for all players
+        for (Player player : getAllPlayers()) {
+            PlayerStats stats = plugin.getGameManager().getPlayerStats(player);
+            stats.addGame();
+        }
+
         // Update stats for winners
         for (Player player : teams.get(winner)) {
-            plugin.getGameManager().getPlayerStats(player).addWin();
+            PlayerStats stats = plugin.getGameManager().getPlayerStats(player);
+            stats.addWin();
+            // Save stats to database
+            plugin.getStatsManager().savePlayerStats(player);
         }
-        
+
         // Update stats for losers
         for (Map.Entry<TeamColor, List<Player>> entry : teams.entrySet()) {
             if (entry.getKey() != winner) {
                 for (Player player : entry.getValue()) {
-                    plugin.getGameManager().getPlayerStats(player).addLoss();
+                    PlayerStats stats = plugin.getGameManager().getPlayerStats(player);
+                    stats.addLoss();
+                    // Save stats to database
+                    plugin.getStatsManager().savePlayerStats(player);
                 }
             }
         }
-        
+
         cleanup();
     }
     
